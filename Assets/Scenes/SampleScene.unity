@@ -279,7 +279,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398291787}
-  m_LocalRotation: {x: 0.010270572, y: -0.00000001720547, z: 1.7671938e-10, w: 0.99994725}
+  m_LocalRotation: {x: 0.010270575, y: 0.000000017213875, z: -1.7680572e-10, w: 0.99994725}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -772,7 +772,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 956796627}
-  m_LocalRotation: {x: 0.046586826, y: 0.0000000021484627, z: -1.00198856e-10, w: 0.99891424}
+  m_LocalRotation: {x: 0.04658683, y: -0.0000000021484619, z: 1.0019883e-10, w: 0.99891424}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1114,7 +1114,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1398948397}
   cam: {fileID: 963194228}
+  _playerCharacterAnimator: {fileID: 1398948399}
   speed: 6
+  jumpSpeed: 6
   turnSmoothTime: 0.1
 --- !u!143 &1398948397
 CharacterController:
@@ -1127,13 +1129,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 3.6
-  m_Radius: 0.6
+  m_Height: 1.84
+  m_Radius: 0.4
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.85, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &1398948398
 Animator:
   serializedVersion: 3
@@ -1232,7 +1234,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401095132}
-  m_LocalRotation: {x: 0.02840938, y: -0, z: -0, w: 0.9995964}
+  m_LocalRotation: {x: 0.02840938, y: -1e-45, z: -0, w: 0.9995964}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

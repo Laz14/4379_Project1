@@ -9,11 +9,15 @@ public class ThirdPersonMovement : MonoBehaviour
     public event Action StartRunning = delegate { };
     public event Action Jump = delegate { };
     public event Action StartFalling = delegate { };
+    public event Action StartSprinting = delegate { };
 
     public CharacterController controller;
     public Transform cam;
 
+    [SerializeField] PlayerCharacterAnimator _playerCharacterAnimator;
+
     public float speed = 6f;
+    public float sprintSpeed = 60f;
     public float jumpSpeed = 1f;
     private float _vSpeed = 0f;
 
@@ -22,7 +26,10 @@ public class ThirdPersonMovement : MonoBehaviour
     public float turnSmoothTime = .1f;
     float turnSmoothVelocity;
 
-    bool _ismoving = false;
+    bool _isMoving = false;
+    bool _isAirborne = false;
+    bool _isFalling = false;
+    bool _isSprinting = false;
 
     private void Start()
     {
@@ -38,6 +45,23 @@ public class ThirdPersonMovement : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
+        if (!_isAirborne && _isMoving)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !_isSprinting)
+            {
+                _isSprinting = true;
+                StartSprinting?.Invoke();
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) && _isSprinting)
+        {
+            _isSprinting = false;
+            if (!_isAirborne && _isMoving)
+            {
+                StartRunning?.Invoke();
+            }
+        }
+
         if (controller.isGrounded)
         {
             _vSpeed = 0f;
@@ -45,6 +69,19 @@ public class ThirdPersonMovement : MonoBehaviour
             {
                 Jump?.Invoke();
                 _vSpeed = jumpSpeed;
+                _isAirborne = true;
+            }
+        }
+        else
+        {
+            if (!_playerCharacterAnimator.IsPlayingAny())
+            {
+                if (!_isFalling)
+                {
+                    StartFalling?.Invoke();
+                    Debug.Log("Started Falling");
+                    _isFalling = true;
+                }
             }
         }
 
@@ -55,12 +92,25 @@ public class ThirdPersonMovement : MonoBehaviour
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            Vector3 moveDir = (Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward).normalized;
-            moveDir *= speed;
+            Vector3 moveDir = new Vector3();
+            if (direction.magnitude >= .1f) {
+                moveDir = (Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward).normalized;
+            }
+            
+            if (!_isSprinting)
+            {
+                moveDir *= speed;
+            }
+            else
+            {
+                moveDir *= sprintSpeed;
+            }
 
             _vSpeed -= _gravity * Time.deltaTime;
             moveDir.y = _vSpeed;
             controller.Move(moveDir * Time.deltaTime);
+
+            CheckIfLanded();
         }
         else
         {
@@ -68,25 +118,39 @@ public class ThirdPersonMovement : MonoBehaviour
         }
     }
 
-    private void CheckIfStartedMoving()
+    private void CheckIfLanded()
     {
-        if (_ismoving == false)
+        if (controller.isGrounded && _isAirborne)
         {
             StartRunning?.Invoke();
+            Debug.Log("Landed");
+            _isAirborne = false;
+            _isFalling = false;
+        }
+    }
+
+    private void CheckIfStartedMoving()
+    {
+        if (_isMoving == false)
+        {
+            if (!_isAirborne)
+            {
+                StartRunning?.Invoke();
+            }
             Debug.Log("Started");
         }
 
-        _ismoving = true;
+        _isMoving = true;
     }
 
     private void CheckIfStoppedMoving()
     {
-        if (_ismoving == true)
+        if (_isMoving == true)
         {
             Idle?.Invoke();
             Debug.Log("Stopped");
         }
 
-        _ismoving = false;
+        _isMoving = false;
     }
 }

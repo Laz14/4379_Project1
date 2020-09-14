@@ -11,8 +11,14 @@ public class PlayerCharacterAnimator : MonoBehaviour
     const string RunState = "Run";
     const string JumpState = "Jumping";
     const string FallState = "Falling";
+    const string SprintState = "Sprinting";
 
     Animator _animator = null;
+
+    public bool IsPlayingAny()
+    {
+        return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1;
+    }
 
     private void Awake()
     {
@@ -26,6 +32,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _thirdPersonMovement.StartRunning += OnStartRunning;
         _thirdPersonMovement.Jump += OnJump;
         _thirdPersonMovement.StartFalling += OnStartFalling;
+        _thirdPersonMovement.StartSprinting += OnStartSprinting;
     }
 
     private void OnDisable()
@@ -33,7 +40,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _thirdPersonMovement.Idle -= OnIdle;
         _thirdPersonMovement.StartRunning -= OnStartRunning;
         _thirdPersonMovement.Jump -= OnJump;
-        _thirdPersonMovement.StartFalling -= OnStartFalling;
+        _thirdPersonMovement.StartSprinting -= OnStartSprinting;
     }
 
     // changes animations when events are recieved
@@ -55,5 +62,10 @@ public class PlayerCharacterAnimator : MonoBehaviour
     private void OnStartFalling()
     {
         _animator.CrossFadeInFixedTime(FallState, .2f);
+    }
+
+    private void OnStartSprinting()
+    {
+        _animator.CrossFadeInFixedTime(SprintState, .2f);
     }
 }
