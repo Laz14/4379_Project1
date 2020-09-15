@@ -153,4 +153,9 @@ public class ThirdPersonMovement : MonoBehaviour
 
         _isMoving = false;
     }
+
+    public void ResetIdle()
+    {
+        Idle?.Invoke();
+    }
 }
