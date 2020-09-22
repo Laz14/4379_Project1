@@ -14,7 +14,16 @@ public class ResettableObject : MonoBehaviour
     public void ResetState()
     {
         this.transform.position = _originalPosition;
-        //this.gameObject.GetComponent<Rigidbody>()?.velocity = Vector3.zero;
-        //this.GetComponent<ThirdPersonMovement>()?.ResetIdle();
+
+        if (this.gameObject.GetComponent<Rigidbody>() != null)
+        {
+            this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            this.gameObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+
+        if (this.gameObject.GetComponent<ThirdPersonMovement>() != null)
+        {
+            this.gameObject.GetComponent<ThirdPersonMovement>().ResetIdle();
+        }
     }
 }
