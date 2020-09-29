@@ -25,5 +25,15 @@ public class ResettableObject : MonoBehaviour
         {
             this.gameObject.GetComponent<ThirdPersonMovement>().ResetIdle();
         }
+
+        if (this.gameObject.GetComponent<Health>() != null)
+        {
+            this.gameObject.GetComponent<Health>().RestoreFull();
+        }
+
+        if (this.gameObject.active == false)
+        {
+            this.gameObject.SetActive(true);
+        }
     }
 }

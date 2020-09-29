@@ -33,4 +33,9 @@ public class Health : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
+    public void RestoreFull()
+    {
+        _health = _maxHealth;
+    }
 }
